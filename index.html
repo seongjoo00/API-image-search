@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API이미지검색</title>
+    <link rel="stylesheet" href="default.css">
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+    <div class="all">
+        <h1><a href="index.html">이미지검색</a></h1>
+
+        <div class="search_area">
+            <input type="text" id="input_search" value="">
+            <button id="search">검색</button>
+        </div>
+        <p>
+            <img src="" alt="">
+        </p>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"
+        integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function () {
+            $("#search").click(function () {
+                $.ajax({
+                    method: "GET",
+                    url: "https://dapi.kakao.com/v2/search/image",
+                    data: { query: $("#input_search").val() },
+                    headers: { Authorization: "KakaoAK a6596e9a582405ff5d5895578d5ea5a1" }
+                })
+                    .done(function (msg) {
+                        $('p > img').attr("src", msg.documents[0].image_url);
+                        $('p > img').attr("alt", $("#input_search").val() + "이미지");
+                    });
+            });
+
+            //엔터키 이벤트
+            $('#input_search').keypress(function (event) {
+                if (event.which == 13) {
+                    $('#search').click();
+                    return false;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
